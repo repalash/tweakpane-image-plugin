@@ -117,7 +117,7 @@ export class PluginController implements Controller<PluginView> {
 			if (image === 'placeholder' || !image) {
 				image = this.handlePlaceholderImage().src;
 			}
-			this.updateImage(image);
+			this.updateImage(image as string);
 		} else {
 			this.setValue(image);
 		}
@@ -131,14 +131,21 @@ export class PluginController implements Controller<PluginView> {
 		if (src instanceof HTMLImageElement) {
 			this.value.setRawValue(src);
 		} else if (src instanceof File) {
-			const url = URL.createObjectURL(src) + '#' + src.name;
-			(src as any).src = url;
-			const img = loadImage(url);
-			// 	.catch(() => {
-			// 	// URL.revokeObjectURL(url);
-			// });
-			// URL.revokeObjectURL(url); //todo: revoke sometime.
-			this.value.setRawValue(img || src);
+			// Only wrap standard raster images into an <img> for preview. For anything
+			// the browser can't decode natively (e.g. .cube LUT, .hdr, .exr, .ktx2,
+			// custom formats), pass the File through unchanged so a downstream consumer
+			// can handle it. Previously this always called loadImage(createObjectURL),
+			// producing a broken HTMLImageElement for non-image formats and silently
+			// losing the original File.
+			if (src.type && src.type.indexOf('image/') === 0) {
+				const url = URL.createObjectURL(src) + '#' + src.name;
+				(src as any).src = url;
+				const img = loadImage(url);
+				// URL.revokeObjectURL(url); //todo: revoke sometime.
+				this.value.setRawValue(img || src);
+			} else {
+				this.value.setRawValue(src);
+			}
 		} else if (src) {
 			this.value.setRawValue(loadImage(src));
 		} else {
