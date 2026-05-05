@@ -23,7 +23,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Pack
-        run: npm pack | xargs -I {} mv {} package.tgz
+        # `--silent` drops the npm notice tarball-contents listing so only the tarball filename
+        # hits stdout, which is what xargs needs. (Prepare-script logs go to stderr already.)
+        run: npm pack --silent | xargs -I {} mv {} package.tgz
       - uses: ncipollo/release-action@v1
         with:
           artifacts: package.tgz
