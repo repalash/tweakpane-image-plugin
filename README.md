@@ -1,5 +1,7 @@
 # Tweakpane image plugin
 Image input plugin for [Tweakpane][tweakpane].
+
+This is a fork of [metehus/tweakpane-image-plugin](https://github.com/metehus/tweakpane-image-plugin) for Tweakpane 3, used by [threepipe](https://threepipe.org) (the upstream moved to Tweakpane 4). It is published to npm as `@threepipe/tweakpane-image-plugin`. Changes: [CHANGELOG.md](CHANGELOG.md).
 ![image](https://user-images.githubusercontent.com/22124518/133916776-a5340b89-025d-44a2-bdc3-87bd11b468db.png)
 
 
@@ -14,7 +16,7 @@ Check out the [demo][demo].
 ## Installation
 You can install [this package][npm-link] via NPM:
 ```sh
-npm i tweakpane-image-plugin
+npm i @threepipe/tweakpane-image-plugin
 ```
 
 ## Usage
@@ -32,7 +34,7 @@ pane.addInput(params, 'url', {
 
 ```js
 import {Pane} from 'tweakpane';
-import * as TweakpaneImagePlugin from 'tweakpane-image-plugin';
+import * as TweakpaneImagePlugin from '@threepipe/tweakpane-image-plugin';
 
 const pane = new Pane();
 pane.registerPlugin(TweakpaneImagePlugin);
@@ -58,5 +60,5 @@ pane.addInput(params, 'url', {
 ```
 
 [tweakpane]: https://github.com/cocopon/tweakpane/
-[npm-link]: https://www.npmjs.com/package/tweakpane-image-plugin
+[npm-link]: https://www.npmjs.com/package/@threepipe/tweakpane-image-plugin
 [demo]: https://tweakpane-image-plugin.netlify.app/
