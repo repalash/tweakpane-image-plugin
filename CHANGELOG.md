@@ -2,6 +2,10 @@
 
 Changes of this fork. Earlier history: [metehus/tweakpane-image-plugin](https://github.com/metehus/tweakpane-image-plugin).
 
+## [Unreleased]
+- `CHANGELOG.md` is included in the npm package.
+- `glob` (used by the `assets` script) is a declared dev dependency.
+
 ## [1.1.406] - 2026-10-25
 - Published to npm as `@threepipe/tweakpane-image-plugin` (earlier versions: GitHub release tarballs only).
 - Releases run through [repalash/release-tools](https://github.com/repalash/release-tools).
