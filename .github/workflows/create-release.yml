@@ -1,31 +1,28 @@
+# Publishes to npm through repalash/release-tools when the version in package.json is not on npm
+# yet, after approval of the npm-publish environment. Each version gets a GitHub release v<version>
+# with the tarball.
+name: Publish to npm
+
 on:
   push:
-    # Sequence of patterns matched against refs/tags
-    tags:
-      - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
+    branches: [main]
+  workflow_dispatch:
 
-name: Create Release
+permissions:
+  contents: read
+
+concurrency:
+  group: publish
+  cancel-in-progress: false
 
 jobs:
-  build:
-    name: Create Release
-    runs-on: ubuntu-latest
+  release:
     permissions:
-      contents: write
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Install Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-          cache: 'npm'
-      - name: Install dependencies
-        run: npm ci
-      - name: Pack
-        # `--silent` drops the npm notice tarball-contents listing so only the tarball filename
-        # hits stdout, which is what xargs needs. (Prepare-script logs go to stderr already.)
-        run: npm pack --silent | xargs -I {} mv {} package.tgz
-      - uses: ncipollo/release-action@v1
-        with:
-          artifacts: package.tgz
+      contents: write # GitHub releases
+      id-token: write # npm trusted publishing
+    uses: repalash/release-tools/.github/workflows/npm-release.yml@v1
+    with:
+      build: npm ci && npm test
+      tag-format: 'v{version}'
+      github-release: true
+    secrets: inherit
